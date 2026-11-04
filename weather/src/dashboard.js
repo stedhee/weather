@@ -89,7 +89,10 @@ function renderHourly(hourly, current, unit) {
     const label =
       index === 0
         ? "Now"
-        : new Date(time).toLocaleTimeString("en", { hour: "numeric" });
+        : new Date(`${time.slice(0, 16)}:00Z`).toLocaleTimeString("en", {
+            hour: "numeric",
+            timeZone: "UTC",
+          });
 
     return `
       <article class="hour-item ${index === 0 ? "hour-now" : ""}">
@@ -139,22 +142,22 @@ function renderWeek(daily, unit) {
     <section class="section week-section" aria-labelledby="week-heading">
       <div class="section-heading">
         <div><span class="section-index">02</span><h2 id="week-heading">This week</h2></div>
-        <span class="section-note">7 DAY OUTLOOK</span>
+        <span class="section-note">5 DAY OUTLOOK</span>
       </div>
       <div class="week-list">${days.join("")}</div>
     </section>`;
 }
 
-function renderDetails(current, daily) {
-  const sunrise = new Date(daily.sunrise[0]).toLocaleTimeString("en", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-  const sunset = new Date(daily.sunset[0]).toLocaleTimeString("en", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-  const uvIndex = daily.uv_index_max[0];
+function renderDetails(current, daily, timezoneOffset) {
+  const cityTime = (timestamp) =>
+    new Date((timestamp + timezoneOffset) * 1000).toLocaleTimeString("en", {
+      hour: "numeric",
+      minute: "2-digit",
+      timeZone: "UTC",
+    });
+  const sunrise = cityTime(daily.sunrise[0]);
+  const sunset = cityTime(daily.sunset[0]);
+  const cloudCover = current.cloud_cover;
 
   return `
     <aside class="section details-section" aria-labelledby="details-heading">
@@ -177,9 +180,9 @@ function renderDetails(current, daily) {
           <span class="detail-foot">Steady breeze</span>
         </div>
         <div class="detail-item">
-          <span class="detail-symbol uv-symbol">UV</span>
-          <div><span class="detail-label">UV index</span><strong>${Math.round(uvIndex)}<small> / 11</small></strong></div>
-          <span class="detail-foot">${uvIndex >= 6 ? "Seek some shade" : "Low exposure"}</span>
+          <span class="detail-symbol cloud-symbol">CL</span>
+          <div><span class="detail-label">Cloud cover</span><strong>${cloudCover}<small>%</small></strong></div>
+          <span class="detail-foot">${cloudCover >= 70 ? "Mostly cloudy" : "Some clear skies"}</span>
         </div>
         <div class="sun-times">
           <div><span class="sunrise-icon">↗</span><span>Sunrise<strong>${sunrise}</strong></span></div>
@@ -236,12 +239,12 @@ export function renderDashboard(app, state, handlers) {
         ${renderHourly(hourly, current, state.unit)}
         <section class="lower-grid">
           ${renderWeek(daily, state.unit)}
-          ${renderDetails(current, daily)}
+          ${renderDetails(current, daily, state.forecast.timezone_offset)}
         </section>
       </main>
       <footer>
         <span>FORECAST FOR ${state.place.name.toUpperCase()}</span>
-        <span>Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo</a></span>
+        <span>Weather data by <a href="https://openweathermap.org/" target="_blank" rel="noreferrer">OpenWeatherMap</a></span>
       </footer>
       ${state.loading ? '<div class="refreshing" role="status">Updating forecast...</div>' : ""}
     </div>`;

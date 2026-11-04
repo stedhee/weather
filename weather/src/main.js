@@ -15,7 +15,7 @@ function render() {
     onRender: render,
     onSearch: loadCity,
     onLocate: locateUser,
-    onRetry: () => loadCity(state.lastQuery || "San Francisco"),
+    onRetry: () => loadCity(state.lastQuery || "London"),
   });
 }
 
@@ -81,8 +81,4 @@ function locateUser() {
 }
 
 render();
-loadCoordinates(37.7749, -122.4194, {
-  name: "San Francisco",
-  admin1: "California",
-  country: "United States",
-});
+loadCity("London");

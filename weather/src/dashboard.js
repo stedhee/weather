@@ -17,8 +17,7 @@ function renderHeader(state) {
   return `
     <header class="topbar">
       <a class="brand" href="#" aria-label="Weather home">
-        <span class="brand-mark">${renderWeatherIcon(0)}</span>
-        <span>weather<span class="brand-period">.</span></span>
+        <img class="brand-logo" src="/checkweather-logo.png" alt="CheckWeather" />
       </a>
       <form class="search" id="search-form" role="search">
         <svg viewBox="0 0 24 24" aria-hidden="true">

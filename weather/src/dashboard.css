@@ -66,12 +66,16 @@ a:focus-visible {
 .brand {
   display: flex;
   align-items: center;
-  gap: 9px;
   color: var(--ink);
   text-decoration: none;
   font-weight: 700;
   font-size: 19px;
   white-space: nowrap;
+}
+.brand-logo {
+  display: block;
+  width: 130px;
+  height: auto;
 }
 .brand-period {
   color: #e5a73d;

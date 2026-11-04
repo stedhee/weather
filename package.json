@@ -1,0 +1,10 @@
+{
+  "name": "weather-workspace",
+  "private": true,
+  "scripts": {
+    "dev": "cd weather && npm run dev",
+    "start": "cd weather && npm run dev",
+    "build": "cd weather && npm run build",
+    "preview": "cd weather && npm run preview"
+  }
+}

@@ -243,7 +243,7 @@ export function renderDashboard(app, state, handlers) {
       </main>
       <footer>
         <span>FORECAST FOR ${state.place.name.toUpperCase()}</span>
-        <span>Weather data by <a href="https://openweathermap.org/" target="_blank" rel="noreferrer">OpenWeatherMap</a></span>
+        <span>Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo</a></span>
       </footer>
       ${state.loading ? '<div class="refreshing" role="status">Updating forecast...</div>' : ""}
     </div>`;
